@@ -1,9 +1,6 @@
 package fr.ekwateur.billing;
 
-import fr.ekwateur.billing.model.ElectricityConsumption;
-import fr.ekwateur.billing.model.GasConsumption;
-import fr.ekwateur.billing.model.IndividualClient;
-import fr.ekwateur.billing.model.MonthlyConsumption;
+import fr.ekwateur.billing.model.*;
 
 import java.util.List;
 
@@ -11,8 +8,13 @@ public class Main {
 
     public static void main(String[] args) {
         var individualClient = new IndividualClient("EKW00000001", "Mr.", "Doe", "John");
+        var proClient1M = new ProfessionalClient("EKW00000002", "12345678901234", "Acme Corp", 1_500_000);
+        var proClient9K = new ProfessionalClient("EKW00000003", "12345678901235", "Acme Corp", 900_000);
+
         var monthlyConsumptions = List.of(
-                new MonthlyConsumption(individualClient, new GasConsumption(200.0), ElectricityConsumption.zero())
+                new MonthlyConsumption(individualClient, new GasConsumption(200.0), ElectricityConsumption.zero()),
+                new MonthlyConsumption(proClient9K, GasConsumption.zero(), new ElectricityConsumption(200)),
+                new MonthlyConsumption(proClient1M, new GasConsumption(200.0), new ElectricityConsumption(200))
         );
 
         for (var mc : monthlyConsumptions) {

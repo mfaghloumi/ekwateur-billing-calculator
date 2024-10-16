@@ -2,7 +2,7 @@ package fr.ekwateur.billing.model;
 
 import java.util.regex.Pattern;
 
-public sealed interface Client permits IndividualClient {
+public sealed interface Client permits ProfessionalClient, IndividualClient {
 
     Pattern CLIENT_REFERENCE_PATTERN = Pattern.compile("EKW\\d{8}");
 

@@ -26,8 +26,57 @@ public class MonthlyConsumptionTest {
             // Act
             double billingAmount = monthlyConsumption.calculateBillingAmount();
 
+            // Expected billing amount:
+            // Electricity: 200 kWh * €0.121 = €24.20
+            // Gas: 100 kWh * €0.115 = €11.50
+            // Total: €35.70
+
             // Assert
             assertEquals(35.70, billingAmount, 0.001);
+        }
+
+        @Test
+        @DisplayName("Should calculate billing amount for ProfessionalClient (revenue < 1,000,000) with gas only")
+        void testProfessionalClientBelowThresholdWithGasOnly() {
+            // Arrange
+            ProfessionalClient client = new ProfessionalClient("EKW87654321", "12345678901234", "Startup Inc", 500_000);
+            GasConsumption gasConsumption = new GasConsumption(300.0);
+            ElectricityConsumption electricityConsumption = ElectricityConsumption.zero();
+
+            MonthlyConsumption monthlyConsumption = new MonthlyConsumption(client, gasConsumption, electricityConsumption);
+
+            // Act
+            double billingAmount = monthlyConsumption.calculateBillingAmount();
+
+            // Expected billing amount:
+            // Electricity: 0 kWh * €0.118 = €0.00
+            // Gas: 300 kWh * €0.113 = €33.90
+            // Total: €33.90
+
+            // Assert
+            assertEquals(33.90, billingAmount, 0.001);
+        }
+
+        @Test
+        @DisplayName("Should calculate billing amount for ProfessionalClient (revenue > 1,000,000) with electricity only")
+        void testProfessionalClientAboveThresholdWithElectricityOnly() {
+            // Arrange
+            ProfessionalClient client = new ProfessionalClient("EKW23456789", "98765432109876", "Global Corp", 2_000_000);
+            GasConsumption gasConsumption = GasConsumption.zero();
+            ElectricityConsumption electricityConsumption = new ElectricityConsumption(400.0);
+
+            MonthlyConsumption monthlyConsumption = new MonthlyConsumption(client, gasConsumption, electricityConsumption);
+
+            // Act
+            double billingAmount = monthlyConsumption.calculateBillingAmount();
+
+            // Expected billing amount:
+            // Electricity: 400 kWh * €0.114 = €45.60
+            // Gas: 0 kWh * €0.111 = €0.00
+            // Total: €45.60
+
+            // Assert
+            assertEquals(45.60, billingAmount, 0.001);
         }
 
         @Test
