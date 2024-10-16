@@ -1,0 +1,93 @@
+package fr.ekwateur.billing.model;
+
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+public class MonthlyConsumptionTest {
+
+    @Nested
+    @DisplayName("Calculate Billing Amount Tests")
+    class CalculateBillingAmountTests {
+
+        @Test
+        @DisplayName("Should calculate billing amount for IndividualClient with both gas and electricity consumption")
+        void testIndividualClientWithGasAndElectricity() {
+            // Arrange
+            IndividualClient client = new IndividualClient("EKW12345678", "Mr.", "Doe", "John");
+            GasConsumption gasConsumption = new GasConsumption(100.0);
+            ElectricityConsumption electricityConsumption = new ElectricityConsumption(200.0);
+
+            MonthlyConsumption monthlyConsumption = new MonthlyConsumption(client, gasConsumption, electricityConsumption);
+
+            // Act
+            double billingAmount = monthlyConsumption.calculateBillingAmount();
+
+            // Assert
+            assertEquals(35.70, billingAmount, 0.001);
+        }
+
+        @Test
+        @DisplayName("Should calculate billing amount with zero consumption")
+        void testZeroConsumption() {
+            // Arrange
+            IndividualClient client = new IndividualClient("EKW34567890", "Ms.", "Smith", "Jane");
+            GasConsumption gasConsumption = GasConsumption.zero();
+            ElectricityConsumption electricityConsumption = ElectricityConsumption.zero();
+
+            MonthlyConsumption monthlyConsumption = new MonthlyConsumption(client, gasConsumption, electricityConsumption);
+
+            // Act
+            double billingAmount = monthlyConsumption.calculateBillingAmount();
+
+            // Assert
+            assertEquals(0.0, billingAmount, 0.001);
+        }
+
+        @Test
+        @DisplayName("Should throw NullPointerException when client is null")
+        void testNullClient() {
+            // Arrange
+            GasConsumption gasConsumption = new GasConsumption(100.0);
+            ElectricityConsumption electricityConsumption = new ElectricityConsumption(200.0);
+
+            // Act & Assert
+            NullPointerException exception = assertThrows(NullPointerException.class, () -> {
+                new MonthlyConsumption(null, gasConsumption, electricityConsumption);
+            });
+            assertEquals("Client cannot be null", exception.getMessage());
+        }
+
+        @Test
+        @DisplayName("Should throw NullPointerException when gas consumption is null")
+        void testNullGasConsumption() {
+            // Arrange
+            IndividualClient client = new IndividualClient("EKW45678901", "Dr.", "Brown", "Emily");
+            ElectricityConsumption electricityConsumption = new ElectricityConsumption(150.0);
+
+            // Act & Assert
+            NullPointerException exception = assertThrows(NullPointerException.class, () -> {
+                new MonthlyConsumption(client, null, electricityConsumption);
+            });
+            assertEquals("Gas consumption cannot be null", exception.getMessage());
+        }
+
+        @Test
+        @DisplayName("Should throw NullPointerException when electricity consumption is null")
+        void testNullElectricityConsumption() {
+            // Arrange
+            IndividualClient client = new IndividualClient("EKW56789012", "Mr.", "Johnson", "Mike");
+            GasConsumption gasConsumption = new GasConsumption(200.0);
+
+            // Act & Assert
+            NullPointerException exception = assertThrows(NullPointerException.class, () -> {
+                new MonthlyConsumption(client, gasConsumption, null);
+            });
+            assertEquals("Electricity consumption cannot be null", exception.getMessage());
+        }
+    }
+}
+
