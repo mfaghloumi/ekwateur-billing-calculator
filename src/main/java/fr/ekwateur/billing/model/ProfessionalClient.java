@@ -7,7 +7,6 @@ public record ProfessionalClient(String clientReference,
                                  String companyName,
                                  double revenue) implements Client {
 
-
     public ProfessionalClient {
         requireNonNull(clientReference, "'clientReference' cannot be null");
         requireNonNull(siretNumber, "'siretNumber' cannot be null");
@@ -24,10 +23,14 @@ public record ProfessionalClient(String clientReference,
     }
 
     public double electricityPricing() {
-        return revenue > 1_000_000 ? 0.114 : 0.118;
+        return pricing().electricityPrice();
     }
 
     public double gasPricing() {
-        return revenue > 1_000_000 ? 0.111 : 0.113;
+        return pricing().gasPrice();
+    }
+
+    private Pricing pricing() {
+        return revenue > 1_000_000 ? Pricing.PRO_OVER_1M : Pricing.PRO_BELOW_1M;
     }
 }

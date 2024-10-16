@@ -26,11 +26,6 @@ public class MonthlyConsumptionTest {
             // Act
             double billingAmount = monthlyConsumption.calculateBillingAmount();
 
-            // Expected billing amount:
-            // Electricity: 200 kWh * €0.121 = €24.20
-            // Gas: 100 kWh * €0.115 = €11.50
-            // Total: €35.70
-
             // Assert
             assertEquals(35.70, billingAmount, 0.001);
         }
@@ -48,11 +43,6 @@ public class MonthlyConsumptionTest {
             // Act
             double billingAmount = monthlyConsumption.calculateBillingAmount();
 
-            // Expected billing amount:
-            // Electricity: 0 kWh * €0.118 = €0.00
-            // Gas: 300 kWh * €0.113 = €33.90
-            // Total: €33.90
-
             // Assert
             assertEquals(33.90, billingAmount, 0.001);
         }
@@ -69,11 +59,6 @@ public class MonthlyConsumptionTest {
 
             // Act
             double billingAmount = monthlyConsumption.calculateBillingAmount();
-
-            // Expected billing amount:
-            // Electricity: 400 kWh * €0.114 = €45.60
-            // Gas: 0 kWh * €0.111 = €0.00
-            // Total: €45.60
 
             // Assert
             assertEquals(45.60, billingAmount, 0.001);

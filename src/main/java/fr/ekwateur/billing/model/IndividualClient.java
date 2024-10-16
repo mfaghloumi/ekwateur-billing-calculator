@@ -19,11 +19,11 @@ public record IndividualClient(String clientReference,
 
     @Override
     public double electricityPricing() {
-        return 0.121;
+        return Pricing.INDIVIDUAL.electricityPrice();
     }
 
     @Override
     public double gasPricing() {
-        return 0.115;
+        return Pricing.INDIVIDUAL.gasPrice();
     }
 }
